@@ -1,0 +1,55 @@
+#Program1: Write a R program to demonstrate use of the ggplot library.
+library(ggplot2)
+# data (crypto market volatile artificial data
+set.seed(42)
+days <- 1:100
+daily_changes <- rnorm(100, mean = 0, sd = 25)
+price <- 100 + cumsum(daily_changes)
+volume <- abs(rnorm(100, mean = 5000, sd = 2000))
+market_mood <- ifelse(daily_changes > 0, "Bullish (Up)", "Bearish (Down)")
+volatile_data <- data.frame(Day = days, Price = price, Volume = volume, Mood = market_mood)
+#Plot 1
+plot1 <- ggplot(volatile_data, aes(x = Day, y = Price)) +
+geom_line(color = "steelblue", linewidth = 1.2) +
+geom_point(aes(color = Mood), size = 2.5, alpha = 0.8) +
+scale_color_manual(values = c("Bearish (Down)" = "red", "Bullish (Up)" = "green")) +
+theme_minimal() +
+labs(title = "Highly Volatile Asset Price Over 100 Days",
+subtitle = "Demonstrating severe market fluctuations",
+x = "Day",
+y = "Price ($)") +
+theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 16),
+plot.subtitle = element_text(hjust = 0.5))
+#Plot 2
+plot2 <- ggplot(volatile_data, aes(x = Volume, y = Price, color = Mood)) +
+geom_point(size = 3, alpha = 0.6) +
+geom_smooth(method = "lm", color = "black", linetype = "dashed", se = FALSE) +
+theme_light() +
+labs(title = "Asset Price vs. Trading Volume",
+x = "Trading Volume",
+y = "Price ($)") +
+scale_color_manual(values = c("Bearish (Down)" = "red", "Bullish (Up)" = "green"))
+# plots!
+print(plot1)
+
+#Program 2:Write a R program to demonstrate use of plotly library.
+library(plotly)
+# Load the data
+drinks_data <- read.csv("drinks.csv")
+# visualization
+fig <- plot_ly(
+ data = drinks_data,
+ x = ~beer_servings,
+ y = ~wine_servings,
+ color = ~total_litres_of_pure_alcohol,
+ size = ~total_litres_of_pure_alcohol,
+ text = ~paste("Country: ", country),
+ type = 'scatter',
+ mode = 'markers'
+)
+#layout
+fig <- fig %>% layout(
+ title = "Alcohol Consumption Analysis",
+ xaxis = list(title = "Beer Servings"),
+ yaxis = list(title = "Wine Servings")
+)
